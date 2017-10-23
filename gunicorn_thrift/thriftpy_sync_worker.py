@@ -72,7 +72,10 @@ class SyncThriftPyWorker(SyncWorker, ProcessorMixin):
             if e.args[0] == errno.ECONNRESET:
                 self.log.debug(e)
             else:
-                self.log.exception(e)
+                if isinstance(e, socket.timeout):
+                    self.log.info("timeout")
+                else:
+                    self.log.exception(e)
         except Exception as e:
             self.log.exception(e)
         finally:
